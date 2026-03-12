@@ -110,6 +110,9 @@ read_from_config() {
         AICORE_SERVICE_NAME=$(grep '"AICORE_SERVICE_NAME"' "$CONFIG_FILE" | head -1 | sed 's/.*: *"\([^"]*\)".*/\1/')
     fi
 
+    # Convert USERNAME to lowercase for CF naming conventions
+    USERNAME=$(echo "$USERNAME" | tr '[:upper:]' '[:lower:]')
+
     # Validate that values were replaced from defaults
     if [[ "$USERNAME" == "your-username" ]] || [[ -z "$USERNAME" ]]; then
         echo -e "${RED}Error: Please update USERNAME in user-config.json${NC}"
@@ -133,6 +136,8 @@ interactive_mode() {
     # Username
     while true; do
         read -p "Enter your username (lowercase, e.g., tac007581u01): " USERNAME
+        # Convert to lowercase
+        USERNAME=$(echo "$USERNAME" | tr '[:upper:]' '[:lower:]')
         if validate_username "$USERNAME"; then
             break
         fi
